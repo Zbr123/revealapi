@@ -19,12 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
-      
-
-      
       - name: Install JMeter
         run: |
-          JMETER_VERSION=5.4.3  # Replace with the current version
+          JMETER_VERSION=2.10  
           wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
           tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
           echo "${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
