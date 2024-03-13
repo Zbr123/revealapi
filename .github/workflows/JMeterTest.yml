@@ -28,7 +28,12 @@ jobs:
       - name: Run JMeter Test
         run: |
           jmeter -n -t /Users/apple/Desktop/Reveal/revealapi/reveal-api.jmx -l test-results.jtl -e -o report/
-
+      - name: Install JMeter
+        run: |
+          JMETER_VERSION=5.4.3  # Replace with the current version
+          wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
+          tar -xzf apache-jmeter-${JMETER_VERSION}.tgz
+          echo "${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
   SecurityCheck:
     name: Check for Security
     runs-on: ubuntu-latest
