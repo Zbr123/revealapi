@@ -9,7 +9,6 @@ jobs:
   JMeterTest:
     name: Load Test with JMeter
     runs-on: ubuntu-latest
-    needs: APITest
     steps:
       - name: Clone Repository
         uses: actions/checkout@v2
