@@ -19,6 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
+      - name: Run JMeter Test
+        run: |
+            jmeter -n -t /Users/apple/Desktop/Reveal/revealapi/reveal-api.jmx -l test-results.jtl -e -o report/
   SecurityCheck:
     name: Check for Security
     runs-on: ubuntu-latest
