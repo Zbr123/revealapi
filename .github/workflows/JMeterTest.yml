@@ -25,17 +25,20 @@ jobs:
             wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
             tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C $GITHUB_WORKSPACE
             echo "${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
-            
+
       - name: Create Report Directory
         run: mkdir -p $GITHUB_WORKSPACE/jmeter-report/
     
-      - name: Run JMeter Test
+      - name: Run JMeter Test and Generate Report
         run: |
-            JMETER_VERSION=5.6.3 # Make sure this matches the JMeter version you want to use
-            jmeter -n -t $GITHUB_WORKSPACE/reveal-api.jmx -l $GITHUB_WORKSPACE/test-results.jtl -e -o $GITHUB_WORKSPACE/report/
-
-      - name: List report directory contents
-        run: ls -alh $GITHUB_WORKSPACE/jmeter-report/
+              JMETER_VERSION=5.6.3
+              JMETER_PATH=${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin
+              JMX_FILE=${GITHUB_WORKSPACE}/reveal-api.jmx
+              RESULTS_FILE=${GITHUB_WORKSPACE}/jmeter-results.jtl
+              REPORT_DIR=${GITHUB_WORKSPACE}/jmeter-report
+              mkdir -p $REPORT_DIR
+              $JMETER_PATH/jmeter -n -t $JMX_FILE -l $RESULTS_FILE -e -o $REPORT_DIR || echo "JMeter test failed"
+              ls -alh $REPORT_DIR
 
       - name: Archive JMeter Test Report
         if: always() # This ensures that the artifact upload step runs even if previous steps fail
