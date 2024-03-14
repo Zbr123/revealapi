@@ -32,11 +32,12 @@ jobs:
             jmeter -n -t $GITHUB_WORKSPACE/reveal-api.jmx -l $GITHUB_WORKSPACE/test-results.jtl -e -o $GITHUB_WORKSPACE/report/
   
       - name: Archive JMeter Test Report
+        if: always() # This ensures that the artifact upload step runs even if previous steps fail
         uses: actions/upload-artifact@v2
         with:
           name: jmeter-report
           path: $GITHUB_WORKSPACE/jmeter-report/
-          
+
   SecurityCheck:
     name: Check for Security
     runs-on: ubuntu-latest
