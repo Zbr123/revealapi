@@ -242,6 +242,7 @@
   &quot;country_code&quot;: &quot;&lt;string&gt;&quot;,&#xd;
   &quot;phone_number&quot;: &quot;&lt;string&gt;&quot;&#xd;
 }</stringProp>
+&quot;phone_number&quot;: &quot;&lt;string&gt;&quot;&#xd;
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
               </collectionProp>
