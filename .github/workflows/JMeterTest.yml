@@ -25,7 +25,10 @@ jobs:
             wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
             tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C $GITHUB_WORKSPACE
             echo "${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
-  
+            
+      - name: Create Report Directory
+        run: mkdir -p $GITHUB_WORKSPACE/jmeter-report/
+    
       - name: Run JMeter Test
         run: |
             JMETER_VERSION=5.6.3 # Make sure this matches the JMeter version you want to use
@@ -33,7 +36,7 @@ jobs:
 
       - name: List report directory contents
         run: ls -alh $GITHUB_WORKSPACE/jmeter-report/
-        
+
       - name: Archive JMeter Test Report
         if: always() # This ensures that the artifact upload step runs even if previous steps fail
         uses: actions/upload-artifact@v2
