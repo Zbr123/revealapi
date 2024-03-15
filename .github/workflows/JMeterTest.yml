@@ -1,59 +1,56 @@
-name: JMeterTest
-on:
-    push:
-      branches:
-        - main
-  
-jobs:
-
-  JMeterTest:
-    name: Load Test with JMeter
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'temurin'
-          java-version: '11'
-
-      - name: Install JMeter
-        run: |
-            JMETER_VERSION=5.6.3 # Make sure this matches the JMeter version you want to use
-            wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
-            tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C $GITHUB_WORKSPACE
-            echo "${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
-
-      - name: Create Report Directory
-        run: mkdir -p $GITHUB_WORKSPACE/jmeter-report/
+  name: JMeterTest
+  on:
+      push:
+        branches:
+          - main
     
-      - name: Run JMeter Test and Generate Report
-        run: |
-              JMETER_VERSION=5.6.3
-              JMETER_PATH=${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin
-              JMX_FILE=${GITHUB_WORKSPACE}/reveal-api.jmx
-              RESULTS_FILE=${GITHUB_WORKSPACE}/jmeter-results.jtl
-              REPORT_DIR=${GITHUB_WORKSPACE}/jmeter-report
-              mkdir -p $REPORT_DIR
-              $JMETER_PATH/jmeter -n -t $JMX_FILE -l $RESULTS_FILE -e -o $REPORT_DIR || echo "JMeter test failed"
-              ls -alh $REPORT_DIR
-
-      - name: Archive JMeter Test Report
-        if: always() # This ensures that the artifact upload step runs even if previous steps fail
-        uses: actions/upload-artifact@v2
-        with:
-          name: jmeter-report
-          path: $GITHUB_WORKSPACE/jmeter-report/
-
-  SecurityCheck:
-    name: Check for Security
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check for Security
-        run: |
-          echo "Running Security Checks.."  
+  jobs:
+    JMeterTest:
+      name: Load Test with JMeter
+      runs-on: ubuntu-latest
+      steps:
+        - name: Clone Repository
+          uses: actions/checkout@v2
+  
+        - name: Set up Java
+          uses: actions/setup-java@v2
+          with:
+            distribution: 'temurin'
+            java-version: '11'
+  
+        - name: Install JMeter
+          run: |
+              JMETER_VERSION=5.6.3 # Make sure this matches the JMeter version you want to use
+              wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz
+              tar -xzf apache-jmeter-${JMETER_VERSION}.tgz -C $GITHUB_WORKSPACE
+              echo "${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
+  
+        - name: Create Report Directory
+          run: |
+              mkdir -p $GITHUB_WORKSPACE/jmeter-report/
+              ls -alh $GITHUB_WORKSPACE/jmeter-report/ # Debug statement to list files in the directory
       
-
+        - name: Run JMeter Test and Generate Report
+          run: |
+                JMETER_VERSION=5.6.3
+                JMETER_PATH=${GITHUB_WORKSPACE}/apache-jmeter-${JMETER_VERSION}/bin
+                JMX_FILE=${GITHUB_WORKSPACE}/reveal-api.jmx
+                RESULTS_FILE=${GITHUB_WORKSPACE}/jmeter-results.jtl
+                REPORT_DIR=${GITHUB_WORKSPACE}/jmeter-report
+                mkdir -p $REPORT_DIR
+                $JMETER_PATH/jmeter -n -t $JMX_FILE -l $RESULTS_FILE -e -o $REPORT_DIR || echo "JMeter test failed"
+                ls -alh $REPORT_DIR
+  
+        - name: Archive JMeter Test Report
+          if: always()
+          uses: actions/upload-artifact@v2
+          with:
+            name: jmeter-report
+            path: $GITHUB_WORKSPACE/jmeter-report/
+  
+        # Add the following step to check permissions and debug directory creation
+        - name: Check Permissions and Debug
+          run: |
+              ls -alh $GITHUB_WORKSPACE  # Debug statement to list files in the workspace directory
+              echo "Current user: $(whoami)"  # Debug statement to print current user
   
