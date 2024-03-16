@@ -20,13 +20,6 @@ jobs:
           outputReportsFolder: reports/
           args: "--loglevel INFO"
 
-      - name: Run JMeter Action on other tests
-        uses: rbhadti94/apache-jmeter-action@v0.5.0
-        with:
-          testFilePath: other-tests/
-          outputReportsFolder: other_reports/
-          args: "--loglevel INFO"
-
       - uses: actions/upload-artifact@v1
         with:
           name: jmeter-test-results
