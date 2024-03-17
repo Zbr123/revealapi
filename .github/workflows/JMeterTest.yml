@@ -7,7 +7,7 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:  # This line has been added to allow manual triggers
+  workflow_dispatch:  
 
 jobs:
   action_build:
