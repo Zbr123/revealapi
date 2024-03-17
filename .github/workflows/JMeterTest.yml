@@ -5,7 +5,8 @@ on:
     branches:
       - main
   pull_request:
-    branches: main
+    branches:
+      - main
 
 jobs:
   action_build:
@@ -13,26 +14,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run JMeter Action on a test
-        uses: rbhadti94/apache-jmeter-action@v0.5.0
-        with:
-          testFilePath: reveal-api.jmx
-          outputReportsFolder: reports/
-          args: "--loglevel INFO"
+      - name: Create reports directory
+        run: mkdir reports
 
-      - name: Run JMeter Action on other tests
-        uses: rbhadti94/apache-jmeter-action@v0.5.0
+      - name: JMeter Test
+        uses: QAInsights/PerfAction@v5.6.2
         with:
-          testFilePath: other-tests/
-          outputReportsFolder: other_reports/
-          args: "--loglevel INFO"
+          test-plan-path: ./tests/reveal-api.jmx
+          args: "-e -o ./reports/html/"
 
-      - uses: actions/upload-artifact@v1
+      - name: Upload Results
+        uses: actions/upload-artifact@v3
         with:
-          name: jmeter-test-results
-          path: reports/
+          name: jmeter-results
+          path: result.jtl
+          if-no-files-found: error
 
-      - uses: actions/upload-artifact@v1
+      - name: Upload HTML Reports
+        uses: actions/upload-artifact@v3
         with:
-          name: jmeter-test-results-other
-          path: other_reports/
+          name: jmeter-html-reports
+          path: reports
+          if-no-files-found: error
