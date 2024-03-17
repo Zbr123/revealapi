@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:  # This line has been added to allow manual triggers
 
 jobs:
   action_build:
@@ -36,3 +37,5 @@ jobs:
           name: jmeter-html-reports
           path: reports
           if-no-files-found: error
+
+          
